@@ -94,6 +94,9 @@ function rayMove(x, y, theta) {
 //     rayPosition[i + 3 * initialRays] = { x: i / initialRays * W, y: H, theta: Math.PI / 2 }
 // }
 function extraRays(n) {
+    if (n > 100000) {
+        n = 100000
+    }
     for (let i = 0; i < n; i++) {
         rayPosition.push({ x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI })
     }
