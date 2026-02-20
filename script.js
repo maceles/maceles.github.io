@@ -16,6 +16,8 @@ const initialRays = 5000
 const rayWidth = 150 / initialRays
 ctx.lineWidth = rayWidth
 const extraRayAmount = 1000
+const interval = 10
+var tick = interval
 
 //Mouse logic
 let mouseX = 0
@@ -25,7 +27,7 @@ document.addEventListener("mousemove", mouseMove);
 function mouseMove(e) {
     mouseX = e.x
     mouseY = e.y
-} 
+}
 document.addEventListener("mousedown", mouseDown);
 function mouseDown(e) {
     mouseVal = true
@@ -50,11 +52,16 @@ function isKeyPressed(key) {
 } // Simulating when Shift held
 setInterval(() => {
     // if (isKeyPressed("Shift")) {
-        engine()
-    // } 
-    if (mouseVal == true) {
-        extraRays(extraRayAmount)
-        mouseVal = false
+    engine()
+    // }
+    if (mouseVal == false) {
+        tick = interval
+    } if (mouseVal == true) {
+        tick++
+        if (tick >= interval) {
+            extraRays(extraRayAmount)
+            tick = 0
+        }
     }
 }, 10);
 function cartesianToPolar(x, y) {
@@ -75,11 +82,8 @@ function cartesianToPolar(x, y) {
 function rayMove(x, y, theta) {
     const polar = cartesianToPolar(x - center.x, y - center.y)
     const t = 1 / 100
-    if (theta >= Math.PI && polar.theta < -Math.PI / 2) {
-        theta += t * (polar.theta - theta) + 2 * Math.PI * t
-    } else {
-        theta += t * (polar.theta - theta)
-    } dx = -Math.cos(theta) * raySpeed
+    theta = Math.acos(Math.cos(theta) + t * (Math.cos(polar.theta) - Math.cos(theta))) * (Math.sin(polar.theta) / Math.abs(Math.sin(polar.theta)))
+    dx = -Math.cos(theta) * raySpeed
     dy = -Math.sin(theta) * raySpeed
     if (polar.r < radius) {
         return { x: x, y: y, theta: theta }
@@ -94,9 +98,6 @@ function rayMove(x, y, theta) {
 //     rayPosition[i + 3 * initialRays] = { x: i / initialRays * W, y: H, theta: Math.PI / 2 }
 // }
 function extraRays(n) {
-    if (n > 100000) {
-        n = 100000
-    }
     for (let i = 0; i < n; i++) {
         rayPosition.push({ x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI })
     }
@@ -109,3 +110,4 @@ function engine() {
         ctx.lineTo(rayPosition[i].x, rayPosition[i].y)
     } ctx.stroke()
 }
+
