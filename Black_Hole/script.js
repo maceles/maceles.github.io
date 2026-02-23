@@ -7,20 +7,19 @@ const W = canvas.width
 const H = canvas.height
 
 const renderQuality = 100
-const radius = 100
 const center = { x: W / 2, y: H / 2 }
 
-const G = 6.67408e-11
-const M = 1e10
-const c = 3e8
-const dl = 1e5
+const G = 1
+const c = 1
+const M = 50
+const dl = 0.5
 
 const raySlowness = c
 const raySpeed = c / raySlowness
 const initialRays = 5000
 const rayWidth = 150 / initialRays
 ctx.lineWidth = rayWidth
-const extraRayAmount = 1000
+const extraRayAmount = 2000
 const interval = 10
 var tick = interval
 
@@ -73,29 +72,58 @@ function cartesianToPolar(x, y) {
         r: Math.sqrt(x ** 2 + y ** 2),
         theta: Math.atan2(y, x)
     }
-} function circle(renderQuality, radius) {
+}
+function circle(renderQuality, mass) {
+    const rs = 2 * G * mass / (c * c);   // nu i pixlar direkt
     for (let i = 0; i < renderQuality; i++) {
         let theta = Math.PI / 2 * i / renderQuality
-        var blockWidth = Math.cos(theta) * radius
-        var blockHeight = Math.sin(theta) * radius
+        let blockWidth = Math.cos(theta) * rs
+        let blockHeight = Math.sin(theta) * rs
         ctx.fillStyle = "black";
-        ctx.fillRect(center.x - blockWidth, center.y - blockHeight, blockWidth * 2, blockHeight * 2);
+        ctx.fillRect(
+            center.x - blockWidth,
+            center.y - blockHeight,
+            blockWidth * 2,
+            blockHeight * 2
+        );
     }
+} circle(renderQuality, M)
+function rayMove(x, y, theta, dr, dtheta) {
+    const dx0 = x - center.x;
+    const dy0 = y - center.y;
+    const r = Math.sqrt(dx0 * dx0 + dy0 * dy0);
 
-} circle(renderQuality, radius)
-function rayMove(x, y, theta) {
-    const polar = cartesianToPolar(x - center.x, y - center.y)
-    const dls = polar.r * 1e8
-    const ds = dls + dl
-    const thetaE = Math.sqrt((4 * G * M * dls) / (c ** 2 * dl * ds))
-    theta += thetaE * 3e8
-    dx = -Math.cos(theta) * raySpeed
-    dy = -Math.sin(theta) * raySpeed
-    if (polar.r < radius) {
-        return { x: x, y: y, theta: theta }
-    } else {
-        return { x: x + dx, y: y + dy, theta: theta }
+    const rs = 2 * M;
+
+    if (r <= rs) {
+        return { x, y, theta, dr: 0, dtheta: 0 };
     }
+    const rx = dx0 / r;
+    const ry = dy0 / r;
+
+    const accel = -2 * M / (r * r);
+    const ax = accel * rx;
+    const ay = accel * ry;
+
+    let vx = Math.cos(theta);
+    let vy = Math.sin(theta);
+    vx += ax * dl;
+    vy += ay * dl;
+
+    const vnorm = Math.sqrt(vx * vx + vy * vy);
+    vx /= vnorm;
+    vy /= vnorm;
+
+    const newX = x + vx * dl;
+    const newY = y + vy * dl;
+    const newTheta = Math.atan2(vy, vx);
+    return {
+        x: newX,
+        y: newY,
+        theta: newTheta,
+        dr: 0,
+        dtheta: 0
+    };
 } const rayPosition = []
 // for (let i = 0; i < initialRays; i++) {
 //     rayPosition[i] = { x: 0, y: i / initialRays * H, theta: Math.PI }
@@ -105,14 +133,14 @@ function rayMove(x, y, theta) {
 // }
 function extraRays(n) {
     for (let i = 0; i < n; i++) {
-        rayPosition.push({ x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI })
+        rayPosition.push({ x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI, dr: 0, dtheta: 0 })
     }
 }
 function engine() {
     ctx.beginPath()
     for (let i = 0; i < rayPosition.length; i++) {
         ctx.moveTo(rayPosition[i].x, rayPosition[i].y)
-        rayPosition[i] = rayMove(rayPosition[i].x, rayPosition[i].y, rayPosition[i].theta)
+        rayPosition[i] = rayMove(rayPosition[i].x, rayPosition[i].y, rayPosition[i].theta, rayPosition[i].dr, rayPosition[i].dtheta)
         ctx.lineTo(rayPosition[i].x, rayPosition[i].y)
     } ctx.stroke()
 }
