@@ -17,9 +17,9 @@ const dl = 0.5
 const raySlowness = c
 const raySpeed = c / raySlowness
 const initialRays = 5000
+const extraRayAmount = 2000
 const rayWidth = 150 / initialRays
 ctx.lineWidth = rayWidth
-const extraRayAmount = 2000
 const interval = 10
 var tick = interval
 
