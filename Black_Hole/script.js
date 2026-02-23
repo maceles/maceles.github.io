@@ -18,7 +18,7 @@ const raySlowness = c
 const raySpeed = c / raySlowness
 const initialRays = 5000
 const extraRayAmount = 2000
-const rayWidth = 150 / initialRays
+const rayWidth = 150 / extraRayAmount
 ctx.lineWidth = rayWidth
 const interval = 10
 var tick = interval
@@ -125,21 +125,18 @@ function rayMove(x, y, theta, dr, dtheta) {
         dtheta: 0
     };
 } const rayPosition = []
-// for (let i = 0; i < initialRays; i++) {
-//     rayPosition[i] = { x: 0, y: i / initialRays * H, theta: Math.PI }
-//     rayPosition[i + initialRays] = { x: W, y: i / initialRays * H, theta: 0 }
-//     rayPosition[i + 2 * initialRays] = { x: i / initialRays * W, y: 0, theta: -Math.PI / 2 }
-//     rayPosition[i + 3 * initialRays] = { x: i / initialRays * W, y: H, theta: Math.PI / 2 }
-// }
+const rayColor = []
 function extraRays(n) {
     for (let i = 0; i < n; i++) {
         rayPosition.push({ x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI, dr: 0, dtheta: 0 })
+        rayColor.push({ r: Math.random() * 150, g: Math.random() * 150, b: Math.random() * 150})
     }
 }
 function engine() {
     ctx.beginPath()
     for (let i = 0; i < rayPosition.length; i++) {
         ctx.moveTo(rayPosition[i].x, rayPosition[i].y)
+        ctx.strokeStyle = `rgb(${rayColor[i].r},${rayColor[i].g},${rayColor[i].b})`;
         rayPosition[i] = rayMove(rayPosition[i].x, rayPosition[i].y, rayPosition[i].theta, rayPosition[i].dr, rayPosition[i].dtheta)
         ctx.lineTo(rayPosition[i].x, rayPosition[i].y)
     } ctx.stroke()
