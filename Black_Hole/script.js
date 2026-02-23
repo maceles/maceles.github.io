@@ -127,18 +127,36 @@ function rayMove(x, y, theta, dr, dtheta) {
 } const rayPosition = []
 const rayColor = []
 function extraRays(n) {
-    for (let i = 0; i < n; i++) {
-        rayPosition.push({ x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI, dr: 0, dtheta: 0 })
-        rayColor.push({ r: Math.random() * 150, g: Math.random() * 150, b: Math.random() * 150})
+    let length = rayPosition.length
+    for (let i = length; i < n + length; i++) {
+        rayPosition[i] = { x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI, dr: 0, dtheta: 0 }
+        if (i == length) {
+            rayColor[i] = { r: Math.random() * 150, g: Math.random() * 150, b: Math.random() * 150 }
+        } else {
+            rayColor[i] = rayColor[i - 1]
+        }
     }
 }
 function engine() {
-    ctx.beginPath()
     for (let i = 0; i < rayPosition.length; i++) {
+
+        ctx.beginPath()
+
         ctx.moveTo(rayPosition[i].x, rayPosition[i].y)
-        ctx.strokeStyle = `rgb(${rayColor[i].r},${rayColor[i].g},${rayColor[i].b})`;
-        rayPosition[i] = rayMove(rayPosition[i].x, rayPosition[i].y, rayPosition[i].theta, rayPosition[i].dr, rayPosition[i].dtheta)
+
+        rayPosition[i] = rayMove(
+            rayPosition[i].x,
+            rayPosition[i].y,
+            rayPosition[i].theta,
+            rayPosition[i].dr,
+            rayPosition[i].dtheta
+        )
+        ctx.strokeStyle = `rgb(${rayColor[i].r},${rayColor[i].g},${rayColor[i].b})`
+
         ctx.lineTo(rayPosition[i].x, rayPosition[i].y)
-    } ctx.stroke()
+
+        ctx.stroke()
+    }
 }
+
 
