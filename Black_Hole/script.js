@@ -10,8 +10,13 @@ const renderQuality = 100
 const radius = 100
 const center = { x: W / 2, y: H / 2 }
 
-const raySlowness = 3e8
-const raySpeed = 3e8 / raySlowness
+const G = 6.67408e-11
+const M = 1e10
+const c = 3e8
+const dl = 1e5
+
+const raySlowness = c
+const raySpeed = c / raySlowness
 const initialRays = 5000
 const rayWidth = 150 / initialRays
 ctx.lineWidth = rayWidth
@@ -36,7 +41,6 @@ document.addEventListener("mouseup", mouseUp);
 function mouseUp() {
     mouseVal = false
 }
-
 //Keyboard logic 
 const keyState = {};
 window.addEventListener("keydown", (event) => {
@@ -81,8 +85,10 @@ function cartesianToPolar(x, y) {
 } circle(renderQuality, radius)
 function rayMove(x, y, theta) {
     const polar = cartesianToPolar(x - center.x, y - center.y)
-    const t = 1 / 100
-    theta = Math.acos(Math.cos(theta) + t * (Math.cos(polar.theta) - Math.cos(theta))) * (Math.sin(polar.theta) / Math.abs(Math.sin(polar.theta)))
+    const dls = polar.r * 1e8
+    const ds = dls + dl
+    const thetaE = Math.sqrt((4 * G * M * dls) / (c ** 2 * dl * ds))
+    theta += thetaE * 3e8
     dx = -Math.cos(theta) * raySpeed
     dy = -Math.sin(theta) * raySpeed
     if (polar.r < radius) {
