@@ -33,12 +33,31 @@ function mouseMove(e) {
     mouseY = e.y
 }
 document.addEventListener("mousedown", mouseDown);
-function mouseDown(e) {
+function mouseDown() {
     mouseVal = true
 }
 document.addEventListener("mouseup", mouseUp);
 function mouseUp() {
     mouseVal = false
+}
+//Touch logic (note, no difference is made between mouse and touch so same variables are reused)
+let touchVal = false
+document.addEventListener("touchstart", touchStart)
+function touchStart(){
+    mouseVal = true
+    mouseX = e.touches[0].clientX
+    mouseY = e.touches[0].clientY
+}
+document.addEventListener("touchend", touchEnd)
+document.addEventListener("touchcancel", touchEnd)
+function touchEnd(){
+    mouseVal = false
+}
+document.addEventListener("touchmove", touchMove, { passive: false })
+function touchMove(e) {
+    e.preventDefault()
+    mouseX = e.touches[0].clientX
+    mouseY = e.touches[0].clientY
 }
 //Keyboard logic 
 const keyState = {};
@@ -158,5 +177,4 @@ function engine() {
         ctx.stroke()
     }
 }
-
 
