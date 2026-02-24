@@ -17,10 +17,10 @@ const dl = 0.5
 const raySlowness = c
 const raySpeed = c / raySlowness
 const initialRays = 5000
-const extraRayAmount = 2000
-const rayWidth = 150 / extraRayAmount
+const extraRayAmount = 500
+const rayWidth = 250 / extraRayAmount
 ctx.lineWidth = rayWidth
-const interval = 10
+const interval = 50
 var tick = interval
 
 //Mouse logic
@@ -43,14 +43,14 @@ function mouseUp() {
 //Touch logic (note, no difference is made between mouse and touch so same variables are reused)
 let touchVal = false
 document.addEventListener("touchstart", touchStart)
-function touchStart(){
+function touchStart() {
     mouseVal = true
     mouseX = e.touches[0].clientX
     mouseY = e.touches[0].clientY
 }
 document.addEventListener("touchend", touchEnd)
 document.addEventListener("touchcancel", touchEnd)
-function touchEnd(){
+function touchEnd() {
     mouseVal = false
 }
 document.addEventListener("touchmove", touchMove, { passive: false })
@@ -73,9 +73,9 @@ function isKeyPressed(key) {
     return !!keyState[key];
 } // Simulating when Shift held
 setInterval(() => {
-    // if (isKeyPressed("Shift")) {
-    engine()
-    // }
+    if (!isKeyPressed("Shift")) {
+        engine()
+    }
     if (mouseVal == false) {
         tick = interval
     } if (mouseVal == true) {
@@ -84,6 +84,9 @@ setInterval(() => {
             extraRays(extraRayAmount)
             tick = 0
         }
+    }
+    if (isKeyPressed("c") || isKeyPressed("C")) {
+        reset()
     }
 }, 10);
 function cartesianToPolar(x, y) {
@@ -143,8 +146,8 @@ function rayMove(x, y, theta, dr, dtheta) {
         dr: 0,
         dtheta: 0
     };
-} const rayPosition = []
-const rayColor = []
+} var rayPosition = []
+var rayColor = []
 function extraRays(n) {
     let length = rayPosition.length
     for (let i = length; i < n + length; i++) {
@@ -177,4 +180,9 @@ function engine() {
         ctx.stroke()
     }
 }
-
+function reset() {
+    rayPosition = []
+    rayColor = []
+    ctx.clearRect(0, 0, W, H)
+    circle(renderQuality, M)
+}
