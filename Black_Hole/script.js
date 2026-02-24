@@ -148,12 +148,13 @@ function rayMove(x, y, theta, dr, dtheta) {
     };
 } var rayPosition = []
 var rayColor = []
+const lightWeight = 3
 function extraRays(n) {
     let length = rayPosition.length
     for (let i = length; i < n + length; i++) {
         rayPosition[i] = { x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI, dr: 0, dtheta: 0 }
         if (i == length) {
-            rayColor[i] = { r: Math.random() * 150, g: Math.random() * 150, b: Math.random() * 150 }
+            rayColor[i] = { r: (Math.random() * 255 + lightWeight * 255) / (lightWeight + 1), g: (Math.random() * 255 + lightWeight * 255) / (lightWeight + 1), b: (Math.random() * 255 + lightWeight * 255) / (lightWeight + 1) }
         } else {
             rayColor[i] = rayColor[i - 1]
         }
@@ -183,6 +184,6 @@ function engine() {
 function reset() {
     rayPosition = []
     rayColor = []
-    ctx.clearRect(0, 0, W, H)
-    circle(renderQuality, M)
-}
+    ctx.fillStyle = `rgb(${0},${0},${0})`
+    ctx.fillRect(0, 0, W, H)
+} reset()
