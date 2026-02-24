@@ -109,7 +109,7 @@ function circle(renderQuality, mass) {
             blockHeight * 2
         );
     }
-} circle(renderQuality, M)
+}
 function rayMove(x, y, theta, dr, dtheta) {
     const dx0 = x - center.x;
     const dy0 = y - center.y;
@@ -143,16 +143,15 @@ function rayMove(x, y, theta, dr, dtheta) {
         x: newX,
         y: newY,
         theta: newTheta,
-        dr: 0,
-        dtheta: 0
     };
 } var rayPosition = []
 var rayColor = []
 const lightWeight = 3
 function extraRays(n) {
     let length = rayPosition.length
+    let variation = Math.random()
     for (let i = length; i < n + length; i++) {
-        rayPosition[i] = { x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI, dr: 0, dtheta: 0 }
+        rayPosition[i] = { x: mouseX, y: mouseY, theta: i / n * 2 * Math.PI + variation * 2 * Math.PI / n}
         if (i == length) {
             rayColor[i] = { r: (Math.random() * 255 + lightWeight * 255) / (lightWeight + 1), g: (Math.random() * 255 + lightWeight * 255) / (lightWeight + 1), b: (Math.random() * 255 + lightWeight * 255) / (lightWeight + 1) }
         } else {
@@ -171,8 +170,6 @@ function engine() {
             rayPosition[i].x,
             rayPosition[i].y,
             rayPosition[i].theta,
-            rayPosition[i].dr,
-            rayPosition[i].dtheta
         )
         ctx.strokeStyle = `rgb(${rayColor[i].r},${rayColor[i].g},${rayColor[i].b})`
 
