@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <meta charset="UTF-8">
+    <title>lokalt chattrum</title>
+    <style>
+        body {
+            font-family: Arial, 'Times New Roman', Times, serif;
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #66cccc;
+            ;
+            color: #cc3333;
+        }
+
+        h1, h3 {
+            text-align: center;
+        }
+
+        #messageInput {
+            width: 75%;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: white;
+            color: #000000
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Chattrum</h1>
+    <h3>meddelanden skickade här sparas bara lokalt</h3>
+    <a href="../index.html" id="sida0">tillbaka</a> <br>
+    <input type="text" id="messageInput" placeholder="Skriv ett meddelande...">
+    <button onclick="sendMessage()">
+        Skicka
+    </button>
+    <table>
+        <tbody id="messageTable"></tbody>
+    </table>
+    <script>
+        let messages =
+            JSON.parse(localStorage.getItem("messages")) || []
+        function saveMessages() {
+            localStorage.setItem(
+                "messages",
+                JSON.stringify(messages)
+            )
+        } function showMessages() {
+            const table =
+                document.getElementById("messageTable")
+            table.innerHTML = ""
+            for (let i = messages.length - 1; i >= 0; i--) {
+                table.innerHTML += `
+                <tr>
+                    <td>
+                    ${messages[i].text}
+                        <span style="
+                        float: right;
+                        color: gray;
+                        font-size: 12px;">
+                            ${messages[i].time}
+                        </span>
+                    </td>
+                    <td style="width: 1%;">
+                        <button onclick="deleteMessage(${i})">
+                            Radera
+                        </button>
+                    </td>
+                </tr>
+            `}
+        } function sendMessage() {
+            const input =
+                document.getElementById("messageInput")
+            const text = input.value.trim()
+            if (text === "") {
+                return
+            } messages.push({
+                text: text,
+                time: new Date().toLocaleString("sv-SE", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                })
+            })
+            saveMessages()
+            input.value = ""
+            showMessages()
+        } function deleteMessage(index) {
+            messages.splice(index, 1)
+            saveMessages()
+            showMessages()
+        } document.getElementById("messageInput").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                sendMessage()
+            }
+        })
+        showMessages()
+    </script>
+
+</body>
+
+</html>
