@@ -8,6 +8,10 @@ document.addEventListener("mousedown", mouseDown);
 function mouseDown() {
     runTest()
 }
+document.addEventListener("touchstart", touchStart)
+function touchStart() {
+    runTest()
+}
 function runTest() {
     n *= -1
     if (n == -1) {
@@ -23,14 +27,14 @@ function runTest() {
         }
     } else {
         if (random2 == 0, random2 == 3) {
-            text.append(names[random])
-            text.append(random + 1)
+            text.append(" " + names[random])
+            text.append(" " + random + 1)
         } else if (random2 == 1) {
-            text.append(short[random])
-            text.append(random + 1)
+            text.append(" " + short[random])
+            text.append(" " + random + 1)
         } else {
-            text.append(names[random])
-            text.append(short[random])
+            text.append(" " + names[random])
+            text.append(" " + short[random])
         }
     }
 }
