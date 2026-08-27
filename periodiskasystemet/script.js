@@ -11,11 +11,12 @@ let textname = document.getElementById("textname");
 document.addEventListener("mousedown", mouseDown);
 function mouseDown() {
     t = true
-}
-document.addEventListener("mouseup", mouseUp);
-function mouseUp() {
-    runTest()
-    t = false
+} if (t == true) {
+    document.addEventListener("mouseup", mouseUp);
+    function mouseUp() {
+        runTest()
+        t = false
+    }
 }
 document.addEventListener("touchstart", touchStart)
 function touchStart() {
