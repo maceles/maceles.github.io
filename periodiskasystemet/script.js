@@ -3,6 +3,7 @@ let names = ['Väte', 'Helium', 'Litium', 'Beryllium', 'Bor', 'Kol', 'Kväve', '
 let random = 0
 let random2 = 0
 let n = 1
+let t = 1
 let text = document.getElementById("text");
 document.addEventListener("mousedown", mouseDown);
 function mouseDown() {
@@ -10,7 +11,10 @@ function mouseDown() {
 }
 document.addEventListener("touchstart", touchStart)
 function touchStart() {
-    runTest()
+    t *= -1
+    if (t == -1) {
+        runTest()
+    }
 }
 function runTest() {
     n *= -1
