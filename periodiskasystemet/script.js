@@ -68,4 +68,4 @@ function runTest() {
             textshort.append(short[random])
         }
     }
-}
+} runTest()
