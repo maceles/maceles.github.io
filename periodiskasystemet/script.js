@@ -11,9 +11,10 @@ let textname = document.getElementById("textname");
 document.addEventListener("touchstart", touchStart)
 function touchStart() {
     t = true
-} if (t == true) {
-    document.addEventListener("touchend", touchEnd)
-    document.addEventListener("touchcancel", touchEnd)
+}
+document.addEventListener("touchend", touchEnd)
+document.addEventListener("touchcancel", touchEnd)
+if (t == true) {
     function touchEnd() {
         runTest()
         t = false
