@@ -18,4 +18,5 @@ td {
     text-align: center;
     padding: 0;
     height: 33.333%;
+    overflow: hidden;
 }
