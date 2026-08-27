@@ -8,16 +8,6 @@ let t = false
 let textindex = document.getElementById("textindex");
 let textshort = document.getElementById("textshort");
 let textname = document.getElementById("textname");
-document.addEventListener("mousedown", mouseDown);
-function mouseDown() {
-    t = true
-} if (t == true) {
-    document.addEventListener("mouseup", mouseUp);
-    function mouseUp() {
-        runTest()
-        t = false
-    }
-}
 document.addEventListener("touchstart", touchStart)
 function touchStart() {
     t = true
@@ -29,6 +19,27 @@ function touchStart() {
         t = false
     }
 }
+const keyState = {};
+window.addEventListener("keydown", (event) => {
+    keyState[event.key] = true; // Mark the key as pressed
+    console.log(`${event.key} is pressed`);
+});
+window.addEventListener("keyup", (event) => {
+    keyState[event.key] = false; // Mark the key as released
+    console.log(`${event.key} is released`);
+});
+function isKeyPressed(key) {
+    return !!keyState[key];
+}
+setInterval(() => {
+    if (!isKeyPressed("Shift")) {
+        t = true
+    }
+    if (isKeyPressed("Shift") && t == true) {
+        t = false
+        runTest()
+    }
+})
 function runTest() {
     n *= -1
     if (n == -1) {
