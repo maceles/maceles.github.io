@@ -5,7 +5,9 @@ let index = 1
 let random2 = 0
 let n = 1
 let t = false
-let text = document.getElementById("text");
+let textindex = document.getElementById("textindex");
+let textshort = document.getElementById("textshort");
+let textname = document.getElementById("textname");
 document.addEventListener("mousedown", mouseDown);
 function mouseDown() {
     runTest()
@@ -27,24 +29,26 @@ function runTest() {
         random = Math.round(Math.random() * (short.length - 1));
         random2 = Math.round(Math.random() * 3)
         index = random + 1
-        text.textContent = ""
+        textshort.textContent = " "
+        textname.textContent = " "
+        textindex.textContent = " "
         if (random2 == 0 || random2 == 3) {
-            text.append(short[random])
+            textshort.append(short[random])
         } else if (random2 == 1) {
-            text.append(names[random])
+            textname.append(names[random])
         } else {
-            text.append(index)
+            textindex.append(index)
         }
     } else {
         if (random2 == 0 || random2 == 3) {
-            text.append(" " + names[random])
-            text.append(" " + index)
+            textname.append(names[random])
+            textindex.append(index)
         } else if (random2 == 1) {
-            text.append(" " + short[random])
-            text.append(" " + index)
+            textshort.append(short[random])
+            textindex.append(index)
         } else {
-            text.append(" " + names[random])
-            text.append(" " + short[random])
+            textname.append(names[random])
+            textshort.append(short[random])
         }
     }
 }
