@@ -4,15 +4,21 @@ let random = 0
 let index = 1
 let random2 = 0
 let n = 1
+let t = false
 let text = document.getElementById("text");
 document.addEventListener("mousedown", mouseDown);
 function mouseDown() {
     runTest()
 }
-document.addEventListener("touchend", touchEnd)
-document.addEventListener("touchcancel", touchEnd)
-function touchEnd() {
-    runTest()
+document.addEventListener("touchstart", touchStart)
+function touchStart() {
+    t = true
+} if (t == true) {
+    document.addEventListener("touchend", touchEnd)
+    document.addEventListener("touchcancel", touchEnd)
+    function touchEnd() {
+        runTest()
+    }
 }
 function runTest() {
     n *= -1
