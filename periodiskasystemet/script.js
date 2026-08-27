@@ -14,8 +14,8 @@ function touchStart() {
 }
 document.addEventListener("touchend", touchEnd)
 document.addEventListener("touchcancel", touchEnd)
-if (t == true) {
-    function touchEnd() {
+function touchEnd() {
+    if (t == true) {
         runTest()
         t = false
     }
