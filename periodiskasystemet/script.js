@@ -21,6 +21,10 @@ function runTest() {
     n *= -1
     if (n == -1) {
         random = Math.round(Math.random() * (short.length - 1));
+        if (random == index - 1 && random < short.length - 1) {
+            random += 1
+            random = random % (short.length - 1)
+        }
         random2 = Math.round(Math.random() * 3)
         index = random + 1
         textshort.textContent = " "
